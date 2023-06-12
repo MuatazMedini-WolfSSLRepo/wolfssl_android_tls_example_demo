@@ -1,0 +1,4 @@
+/Users/muatazmedini/Work/Projects/WolfSSLAndroidImplementationExample/IDE/Android/app/.cxx/Debug/1g2h2r5o/x86/CMakeFiles/rebuild_cache.dir
+/Users/muatazmedini/Work/Projects/WolfSSLAndroidImplementationExample/IDE/Android/app/.cxx/Debug/1g2h2r5o/x86/CMakeFiles/edit_cache.dir
+/Users/muatazmedini/Work/Projects/WolfSSLAndroidImplementationExample/IDE/Android/app/.cxx/Debug/1g2h2r5o/x86/CMakeFiles/wolfssljni.dir
+/Users/muatazmedini/Work/Projects/WolfSSLAndroidImplementationExample/IDE/Android/app/.cxx/Debug/1g2h2r5o/x86/CMakeFiles/wolfssl.dir

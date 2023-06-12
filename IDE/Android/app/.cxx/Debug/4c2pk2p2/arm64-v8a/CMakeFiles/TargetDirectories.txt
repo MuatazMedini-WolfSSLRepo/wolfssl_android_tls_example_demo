@@ -1,0 +1,4 @@
+/Users/muatazmedini/Work/Projects/wolfssljni-threaded-client-server-example/IDE/Android/app/.cxx/Debug/4c2pk2p2/arm64-v8a/CMakeFiles/rebuild_cache.dir
+/Users/muatazmedini/Work/Projects/wolfssljni-threaded-client-server-example/IDE/Android/app/.cxx/Debug/4c2pk2p2/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/muatazmedini/Work/Projects/wolfssljni-threaded-client-server-example/IDE/Android/app/.cxx/Debug/4c2pk2p2/arm64-v8a/CMakeFiles/wolfssljni.dir
+/Users/muatazmedini/Work/Projects/wolfssljni-threaded-client-server-example/IDE/Android/app/.cxx/Debug/4c2pk2p2/arm64-v8a/CMakeFiles/wolfssl.dir

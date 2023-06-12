@@ -1,0 +1,8 @@
+Executable : /Users/muatazmedini/Library/Android/sdk/cmake/3.18.1/bin/ninja
+arguments : 
+-C
+/Volumes/MuatazWork/SanDisk/1. Work/Personal/Android/Gihthub Projects/WolfSSL Integration Folders Important/wolfssljni-threaded-client-server-example/IDE/Android/app/.cxx/Debug/5k254qan/x86_64
+wolfssl
+wolfssljni
+jvmArgs : 
+

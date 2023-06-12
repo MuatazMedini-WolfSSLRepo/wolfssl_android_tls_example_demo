@@ -1,0 +1,4 @@
+/Volumes/MuatazWork/SanDisk/1. Work/Personal/Android/Gihthub Projects/WolfSSL Integration Folders Important/wolfssljni-threaded-client-server-example/IDE/Android/app/.cxx/Debug/5k254qan/x86_64/CMakeFiles/rebuild_cache.dir
+/Volumes/MuatazWork/SanDisk/1. Work/Personal/Android/Gihthub Projects/WolfSSL Integration Folders Important/wolfssljni-threaded-client-server-example/IDE/Android/app/.cxx/Debug/5k254qan/x86_64/CMakeFiles/edit_cache.dir
+/Volumes/MuatazWork/SanDisk/1. Work/Personal/Android/Gihthub Projects/WolfSSL Integration Folders Important/wolfssljni-threaded-client-server-example/IDE/Android/app/.cxx/Debug/5k254qan/x86_64/CMakeFiles/wolfssljni.dir
+/Volumes/MuatazWork/SanDisk/1. Work/Personal/Android/Gihthub Projects/WolfSSL Integration Folders Important/wolfssljni-threaded-client-server-example/IDE/Android/app/.cxx/Debug/5k254qan/x86_64/CMakeFiles/wolfssl.dir

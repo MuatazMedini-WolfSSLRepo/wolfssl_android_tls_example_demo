@@ -1,0 +1,8 @@
+Executable : /Users/muatazmedini/Library/Android/sdk/cmake/3.18.1/bin/ninja
+arguments : 
+-C
+/Users/muatazmedini/Work/Projects/wolfssljni-threaded-client-server-example/IDE/Android/app/.cxx/Debug/4c2pk2p2/armeabi-v7a
+wolfssl
+wolfssljni
+jvmArgs : 
+

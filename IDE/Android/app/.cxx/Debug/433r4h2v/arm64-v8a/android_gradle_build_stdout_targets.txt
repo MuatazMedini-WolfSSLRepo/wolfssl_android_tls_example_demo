@@ -1,0 +1,2 @@
+ninja: Entering directory `/Users/muatazmedini/Work/Personal/WolfSSL Integration Folders Important/wolfssljni-master/IDE/Android/app/.cxx/Debug/433r4h2v/arm64-v8a'
+ninja: no work to do.

@@ -1,0 +1,8 @@
+Executable : /Users/muatazmedini/Library/Android/sdk/cmake/3.18.1/bin/ninja
+arguments : 
+-C
+/Users/muatazmedini/Work/Personal/wolfssljni-master/IDE/Android/app/.cxx/Debug/4r46e9q4/arm64-v8a
+wolfssl
+wolfssljni
+jvmArgs : 
+

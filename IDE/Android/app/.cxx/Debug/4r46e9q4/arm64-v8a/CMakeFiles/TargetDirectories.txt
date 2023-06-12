@@ -1,0 +1,4 @@
+/Users/muatazmedini/Work/Personal/wolfssljni-master/IDE/Android/app/.cxx/Debug/4r46e9q4/arm64-v8a/CMakeFiles/rebuild_cache.dir
+/Users/muatazmedini/Work/Personal/wolfssljni-master/IDE/Android/app/.cxx/Debug/4r46e9q4/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/muatazmedini/Work/Personal/wolfssljni-master/IDE/Android/app/.cxx/Debug/4r46e9q4/arm64-v8a/CMakeFiles/wolfssljni.dir
+/Users/muatazmedini/Work/Personal/wolfssljni-master/IDE/Android/app/.cxx/Debug/4r46e9q4/arm64-v8a/CMakeFiles/wolfssl.dir
