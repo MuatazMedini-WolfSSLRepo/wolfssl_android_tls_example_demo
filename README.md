@@ -100,5 +100,54 @@ In summary, a Java Keystore is used to store cryptographic keys, private keys, a
 
 
 <h2> Project Implementation </h2>
-The file structure of the Project is <project_directory>/
+This project supports only one way authentication (SSL Handshake) ie: The TLS Client authenticates a TLS server by verifying the server's certificate (chain of trust).
+The TLS server authentication of the TLS Client will be added later.
+
+The file structure of the Project is <project_directory>/Projects/wolfssl_android_tls_example_demo/IDE/Android
+
+Open the "Android" project mentioned at the end of the file structure.
+
+<h3> WolfSSL Initialization </h3>
+Declare the following codes in the MainActivity.java file
+
+The WolfSSLProvider is instantiated to access and use the WolfSSL Library. It is declared in the MainActivity.
+
+``` 
+// Add the WolfSSLProvider here
+Security.addProvider(new WolfSSLProvider()); 
+```
+
+To enable WolfSSL Debug logs, use this code.
+
+```    
+// Enable WolfSSL Debug Logs here
+System.setProperty("wolfjsse.debug", "true");
+```
+
+The Keystore and truststore used in this project is in BKS format as the Android doesn't support the keystore and truststore in the JKS format. 
+You can use the code below in your terminal to convert the keystore and truststore from JKS to BKS format:
+
+```
+keytool -importkeystore -srckeystore keystore.jks -srcstoretype JKS -destkeystore keystore.bks -deststoretype BKS -provider org.bouncycastle.jce.provider.BouncyCastleProvider -providerpath <BountyCastleJarFilePath>/bcprov-jdk15on-1.52.jar
+```
+
+```
+keytool -importkeystore -srckeystore truststore.jks -srcstoretype JKS -destkeystore truststore.bks -deststoretype BKS -provider org.bouncycastle.jce.provider.BouncyCastleProvider -providerpath <BountyCastleJarFilePath>/bcprov-jdk15on-1.52.jar
+```
+
+The Keystore and Truststore are added in "raw" resource folder as shown in the figure below:
+![Screenshot 2023-06-13 at 11 17 18 AM](https://github.com/MuatazMedini-WolfSSLRepo/wolfssl_android_tls_example_demo/assets/59283470/1cefa954-f848-41bd-804e-6808e359abc5)
+
+
+The Keystore and Truststore present are accessed from the "raw" resource folder by using the InputSream.
+
+```
+int keystoreRes = R.raw.keystore;
+int truststoreRes = R.raw.truststore;
+String ksPass = "wolfssl";
+String tsPass = "wolfssl";
+InputStream ksInputStream = getResources().openRawResource(keystoreRes);
+InputStream tsInputStream = getResources().openRawResource(truststoreRes);
+```
+
 
