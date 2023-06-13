@@ -110,7 +110,7 @@ Open the "Android" project mentioned at the end of the file structure.
 <h3> WolfSSL Initialization </h3>
 Declare the following codes in the MainActivity.java file
 
-The WolfSSLProvider is instantiated to access and use the WolfSSL Library. It is declared in the MainActivity.
+1. The WolfSSLProvider is instantiated to access and use the WolfSSL Library. It is declared in the MainActivity.
 
 ``` 
 // Add the WolfSSLProvider here
@@ -139,7 +139,7 @@ The Keystore and Truststore are added in "raw" resource folder as shown in the f
 ![Screenshot 2023-06-13 at 11 17 18 AM](https://github.com/MuatazMedini-WolfSSLRepo/wolfssl_android_tls_example_demo/assets/59283470/1cefa954-f848-41bd-804e-6808e359abc5)
 
 
-The Keystore and Truststore present are accessed from the "raw" resource folder by using the InputSream.
+2. The Keystore and Truststore present are accessed from the "raw" resource folder by using the InputSream.
 
 ```
 int keystoreRes = R.raw.keystore;
@@ -150,4 +150,164 @@ InputStream ksInputStream = getResources().openRawResource(keystoreRes);
 InputStream tsInputStream = getResources().openRawResource(truststoreRes);
 ```
 
+  The Keystore and the Truststore require a password to access the server-certificate and server-private key in the keystore and the ca-certificate (used to sign the server certificate) in the Truststore  respectively.
 
+3. The ClientEngine is instantiated by passing the Truststore to the ClientEngine's constructor. The TLS Client uses Truststore to authenticate the TLS Server by verifiying the Server-certificate.
+```
+clientEngine = new ClientEngine(tsInputStream, tsPass);
+```
+
+  The ServerEngine is instantiated by passing the Keystore to the ServerEngine's constructor. The TLS Server uses Keystore to store the server-certificate and the server-private-key.
+```
+serverEngine = new ServerEngine(ksInputStream, ksPass);
+```
+4. Begin the TLS Handshake process when "Start TLS Handshake" button is clicked.
+```
+// Begin SSL Handshake
+serverEngine.beginHandshake();
+clientEngine.beginHandshake();
+```
+
+5. The following codes perform the TLS Handshake between the Client and the Server.
+   Here, for simplicity I am using memory buffers (byte array) to get the TLS Handshake Data from the ClientEngine and parsing the TLS Handshake in the ServerEngine and vice-versa. 
+   The TLS Data generated can be transported across the Bluetooth network, Bluetooth Low Energy Network or through Sockets.
+```
+try {
+                buttonStartConnection.setEnabled(false);
+
+                InputStream ksInputStream = getResources().openRawResource(keystoreRes);
+                InputStream tsInputStream = getResources().openRawResource(truststoreRes);
+
+                clientEngine = new ClientEngine(tsInputStream, tsPass);
+                serverEngine = new ServerEngine(ksInputStream, ksPass);
+
+                // Begin SSL Handshake
+                serverEngine.beginHandshake();
+                clientEngine.beginHandshake();
+
+                // Step 1 : Generate TLS Handshake CLIENT-HELLO Data (Client to Server)
+                clientEngine.encryptData(new byte[]{}, tlsClientHelloData -> {
+                    /*
+                     *  tlsClientHelloData can be wrapped into another data packet and sent to the device configured as a TLS Server either
+                     *  through Bluetooth Network, Bluetooth Low Energy Network, or through Sockets.
+                     */
+                    console.log(TAG, ByteConverter.getHexStringFromByteArray(tlsClientHelloData, true));
+
+                    /*
+                        The device configured as a TLS Server receives the data from the client. The data received is parsed as a TLS Server.
+                        Note : The data is not decrypted as it is a TLS Handshake Data
+                     */
+                    serverEngine.decryptData(tlsClientHelloData, null);
+
+
+                    // Step 2 : Generate TLS Handshake SERVER-HELLO Data - (Server to Client)
+                    serverEngine.encryptData(new byte[]{}, tlsServerHelloData -> {
+                        /*
+                         *  tlsServerHelloData can be wrapped into another data packet and sent to the device configured as a TLS Client either
+                         *  through Bluetooth Network, Bluetooth Low Energy Network, or through Sockets.
+                         */
+                        console.log(TAG, ByteConverter.getHexStringFromByteArray(tlsServerHelloData, true));
+
+                        /*
+                        The end-device receives the data from the client. The data received by the end-device is parsed as a TLS Server.
+                        Note : The data is not decrypted as it is a TLS Handshake Data
+                        */
+                        clientEngine.decryptData(tlsServerHelloData, null);
+
+
+                        // Step 3 : Generate TLS Handshake CLIENT-CHANGE-CIPHER-SPEC Data (Client to Server)
+                        clientEngine.encryptData(new byte[]{}, tlsChangeClientCipherSpecData -> {
+                            /*
+                             *  tlsChangeClientCipherSpecData can be wrapped into another data packet and sent to the device configured as a TLS Server either
+                             *  through Bluetooth Network, Bluetooth Low Energy Network, or through Sockets.
+                             */
+                            console.log(TAG, ByteConverter.getHexStringFromByteArray(tlsChangeClientCipherSpecData, true));
+
+                            /*
+                                The end-device receives the data from the client. The data received by the end-device is parsed as a TLS Server.
+                                Note : The data is not decrypted as it is a TLS Handshake Data
+                            */
+                            serverEngine.decryptData(tlsChangeClientCipherSpecData, null);
+
+                            // Step 4 : Generate TLS Handshake SERVER-CHANGE-CIPHER-SPEC Data (Server to Client)
+                            serverEngine.encryptData(new byte[]{}, tlsHandshakeServerCipherSpec -> {
+                                /*
+                                 *  tlsHandshakeServerCipherSpec can be wrapped into another data packet and sent to the device configured as a TLS Client either
+                                 *  through Bluetooth Network, Bluetooth Low Energy Network, or through Sockets.
+                                 */
+                                console.log(TAG, ByteConverter.getHexStringFromByteArray(tlsHandshakeServerCipherSpec, true));
+
+                                clientEngine.decryptData(tlsHandshakeServerCipherSpec, null);
+                                if (clientEngine.getHandshakeStatus() == SSLEngineResult.HandshakeStatus.FINISHED ||
+                                        clientEngine.getHandshakeStatus() == SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING) {
+                                    if (serverEngine.getHandshakeStatus() == SSLEngineResult.HandshakeStatus.FINISHED ||
+                                            serverEngine.getHandshakeStatus() == SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING) {
+                                        console.log(TAG, "TLS Handshake Complete");
+
+                                        buttonSendAppData.setEnabled(false);
+                                        buttonSendAppData.setEnabled(true);
+                                    }
+                                }
+                            });
+                        });
+                    });
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                buttonStartConnection.setEnabled(true);
+                buttonSendAppData.setEnabled(false);
+            }
+```
+
+6. The "Start TLS Handshake" button is disabled after the TLS Handshake is successful between the TLS Client and the TLS Server. 
+   The "Begin Sending App Data" button is enabled after the TLS HAndshake is completed.
+   
+  In this implementation: 
+  The Client App Data is encrypted by the ClientEngine to generate a TLS Client App Data. This TLS Client App Data is decrypted at the ServerEngine.
+  The Server App Data is encrypted by the ServerEngine to generate a TLS Server App Data. This TLS Server App Data is decrypted at the ClientEngine.
+  
+  The following code is shown below:
+```
+buttonSendAppData.setOnClickListener(v -> {
+            /*
+                1. As an example, the TLS Client sends an app data to the TLS Server. The TLS Server then parses the data sent by the TLS Client.
+                2. The TLS Server then sends an app data to the TLS Client. The TLS Client then parses the data sent by the TLS Server.
+             */
+            byte[] clientAppData = "Hi. This is the message from the TLS Client".getBytes(StandardCharsets.UTF_8);
+            byte[] serverAppData = "Hi. This is the message from the TLS Server".getBytes(StandardCharsets.UTF_8);
+
+            console.log(TAG, "Client App Data = " + ByteConverter.getHexStringFromByteArray(clientAppData, true));
+            console.log(TAG, "Server App Data = " + ByteConverter.getHexStringFromByteArray(serverAppData, true));
+            // Begin Sending App Data to the server
+            clientEngine.encryptData(clientAppData, new ClientEngine.OnDataEncryptedListener() {
+                @Override
+                public void onDataEncrypted(byte[] tlsClientAppData) {
+                    // Send the TLS Client App Data to the Server
+                    console.log(TAG, "TLS Client App Data = " + ByteConverter.getHexStringFromByteArray(tlsClientAppData, true));
+
+                    // Parse the TLS Client App Data sent by the Client in the TLS Server
+                    serverEngine.decryptData(tlsClientAppData, tlsAppData -> {
+                        console.log(TAG, "TLS Client App Data parsed by the server = " + ByteConverter.getHexStringFromByteArray(tlsAppData, true));
+                        console.log(TAG, "TLS Client App Decrypted Message = " + new String(tlsAppData, StandardCharsets.UTF_8));
+
+                        serverEngine.encryptData(serverAppData, new ServerEngine.OnDataEncryptedListener() {
+                            @Override
+                            public void onDataEncrypted(byte[] tlsServerAppData) {
+                                // Send the TLS Server App Data to the Client
+                                console.log(TAG, "TLS Server App Data = " + ByteConverter.getHexStringFromByteArray(tlsServerAppData, true));
+
+                                // Parse the TLS Server App Data sent by the Server in the TLS Client
+                                clientEngine.decryptData(tlsServerAppData, new ClientEngine.OnDataDecryptedListener() {
+                                    @Override
+                                    public void onDataDecrypted(byte[] tlsAppData) {
+                                        console.log(TAG, "TLS Server App Data parsed by the client = " + ByteConverter.getHexStringFromByteArray(tlsAppData, true));
+                                        console.log(TAG, "TLS Server App Decrypted Message = " + new String(tlsAppData, StandardCharsets.UTF_8));
+                                    }
+                                });
+                            }
+                        });
+                    });
+                }
+            });
+        });
+```
