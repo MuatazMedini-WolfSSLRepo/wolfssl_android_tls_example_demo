@@ -311,3 +311,6 @@ buttonSendAppData.setOnClickListener(v -> {
             });
         });
 ```
+
+This implementation demonstrates using the ClientEngine and the ServerEngine to perform SSL/TLS Handshake, encrypt and decrypt TLS App data.
+Please feel free to contact me at andro.medini07@gmail.com for any doubts or assistance.
