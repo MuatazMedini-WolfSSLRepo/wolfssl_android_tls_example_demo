@@ -100,5 +100,5 @@ In summary, a Java Keystore is used to store cryptographic keys, private keys, a
 
 
 <h2> Project Implementation </h2>
-
+The file structure of the Project is <project_directory>/
 
